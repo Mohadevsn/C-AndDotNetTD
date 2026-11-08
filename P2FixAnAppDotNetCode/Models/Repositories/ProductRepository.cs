@@ -10,10 +10,20 @@ namespace P2FixAnAppDotNetCode.Models.Repositories
     {
         private static List<Product> _products;
 
+        private static readonly object _lock = new object();
+
         public ProductRepository()
         {
-            _products = new List<Product>();
-            GenerateProductData();
+            // BUG corrigé : le repository est "Transient", il est donc recréé à chaque requête.
+            // La liste statique était réinitialisée à chaque fois, le stock n'était jamais décrémenté.
+            lock (_lock)
+            {
+                if (_products == null)
+                {
+                    _products = new List<Product>();
+                    GenerateProductData();
+                }
+            }
         }
 
         /// <summary>
@@ -52,7 +62,7 @@ namespace P2FixAnAppDotNetCode.Models.Repositories
             Product product = _products.First(p => p.Id == productId);
             product.Stock = product.Stock - quantityToRemove;
 
-            if (product.Stock == 0)
+            if (product.Stock <= 0)
                 _products.Remove(product);
         }
     }

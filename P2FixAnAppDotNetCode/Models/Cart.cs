@@ -63,7 +63,8 @@ namespace P2FixAnAppDotNetCode.Models
         {
             // TODO implement the method
             // DONE OD
-            return GetCartLineList().Sum(x => x.Product.Price);
+            // BUG corrigé : la quantité de chaque ligne n'était pas prise en compte
+            return GetCartLineList().Sum(x => x.Product.Price * x.Quantity);
         }
 
         /// <summary>
@@ -73,10 +74,9 @@ namespace P2FixAnAppDotNetCode.Models
         {
             // TODO implement the method
             // DONE OD
-            if (GetCartLineList().Count > 0)
-                return GetCartLineList().Average(x => x.Product.Price);
-            else
-                return 0.0;
+            // BUG corrigé : moyenne par article (total / nombre d'articles), pas par ligne
+            int totalQuantity = GetCartLineList().Sum(x => x.Quantity);
+            return totalQuantity > 0 ? GetTotalValue() / totalQuantity : 0.0;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace P2FixAnAppDotNetCode.Models
         {
             // TODO implement the method
             // DONE OD
-            return GetCartLineList().Where(x => x.Product.Id == productId).FirstOrDefault().Product;
+            return GetCartLineList().FirstOrDefault(x => x.Product.Id == productId)?.Product;
         }
 
         /// <summary>

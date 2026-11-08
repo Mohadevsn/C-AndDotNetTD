@@ -26,7 +26,8 @@ namespace P2FixAnAppDotNetCode
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
-            services.AddSingleton<ICart, Cart>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICart>(CartProvider.GetCart);
             services.AddSingleton<ILanguageService, LanguageService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IProductRepository, ProductRepository>();

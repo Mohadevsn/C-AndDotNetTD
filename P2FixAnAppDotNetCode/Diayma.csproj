@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -28,14 +28,6 @@
 
   <ItemGroup>
     <Compile Remove="Models\SessionCart.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Resources\Models\Order.en.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Resources\Models\ViewModels\Order.en.resx" />
   </ItemGroup>
 
 </Project>
